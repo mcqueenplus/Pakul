@@ -1,24 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Pemetaan -->
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <meta name="robots" content="noindex">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="referrer" content="no-referrer"/>
-        <meta name="msapplication-TileColor" content="#3f51b5">
-    <!-- Functional & CSS -->
-        <script src="https://cdn.jsdelivr.net/npm/p2p-media-loader-core@latest/build/p2p-media-loader-core.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/p2p-media-loader-hlsjs@latest/build/p2p-media-loader-hlsjs.min.js"></script>
-        <link rel='stylesheet' href='https://shabrina0401.github.io/blog/Player/plyr.css'>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
-        <script src="https://shabrina0401.github.io/blog/Player/plyr.js"></script>
-        <link rel="shortcut icon" type="image/x-icon" href="https://github.com/shabrina0401/pict/raw/main/Mcqueen.png">
- 
-<script src="https://ads.tsptv.my.id/script/adsterra/social.js"></script> 
-
+<script src="https://ajax.googleapis.com/ajax/libs/shaka-player/4.3.0/shaka-player.compiled.js"></script>
+<!-- or, for UI builds: -->
+<script src="https://ajax.googleapis.com/ajax/libs/shaka-player/4.3.0/shaka-player.ui.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/shaka-player/3.2.0/controls.css"/>
 <style>
     body {
         width:100%;
@@ -53,22 +39,76 @@
         opacity: 0.4;
     }
 </style>
+<body>     
 
-</head>
-<body oncontextmenu='return false' onkeydown='return false;' onmousedown='return false;'>
-
-<video id="player" crossorigin="anonymous" preload="none" playsinline controls allowFullScreen webkitallowfullscreen mozallowfullscreen="true"></video>
-
-<script src="https://shabrina0401.github.io/blog/Player/player.js"></script> 
-            <script src="https://shabrina0401.github.io/blog/Player/shaka-player.compiled.js"></script>
+<video autoplay="true" data-shaka-player="" poster="" id="video" style="width:100%;height:100%" class="shaka-video"></video>
 <script>
-    var data = {
-            drm: 'aHR0cHM6Ly9kcm13aWRldmluZS5ub250b25ib2xhLm15LmlkL2h0dHBzOi8vbXJwdy5wdG1uYzAxLnZlcnNwZWN0aXZlLm5ldC8/ZGV2aWNlSWQ9Tmpjd1lXSTJaR0V0WXpFNFlpMHpaV0ZsTFRsak9XWXRaR0V6T0dJd1lXRmpOMkkx',
-            widevine: 'aHR0cHM6Ly9saXZlYW5ldmlhZGV2Lm1uY25vdy5pZC9saXZlL2Vkcy9zb2NjZXJjaGFubmVsLUhEL3NhX2Rhc2hfdm14L3NvY2NlcmNoYW5uZWwtSEQubXBk',
-        }
-        
-        
+
+const manifestUri =
+    'https://akm611a-live-cdn.mncnow.id/live/eds/soccerchannel-HD/sa_dash_vmx/soccerchannel-HD.mpd';
+
+async function init() {
+  // When using the UI, the player is made automatically by the UI object.
+  const video = document.getElementById('video');
+  const ui = video['ui'];
+  const controls = ui.getControls();
+  const player = controls.getPlayer();
+
+player.configure({
+  drm: {
+    servers: {
+      'com.widevine.alpha': 'https://drmwidevine.nontonbola.my.id/https://mrpw.ptmnc01.verspective.net/?deviceId=YzM0NDA0MTItMGYyMC0zNGQ0LTliMjMtNDY4MjE1ZjA5NmZj',
+    }
+  }
+});
+
+  // Attach player and ui to the window to make it easy to access in the JS console.
+  window.player = player;
+  window.ui = ui;
+
+  // Listen for error events.
+  player.addEventListener('error', onPlayerErrorEvent);
+  controls.addEventListener('error', onUIErrorEvent);
+
+  // Try to load a manifest.
+  // This is an asynchronous process.
+  try {
+    await player.load(manifestUri);
+    // This runs if the asynchronous load is successful.
+    console.log('The video has now been loaded!');
+  } catch (error) {
+    onPlayerError(error);
+  }
+}
+
+function onPlayerErrorEvent(errorEvent) {
+  // Extract the shaka.util.Error object from the event.
+  onPlayerError(event.detail);
+}
+
+function onPlayerError(error) {
+  // Handle player error
+  console.error('Error code', error.code, 'object', error);
+}
+
+function onUIErrorEvent(errorEvent) {
+  // Extract the shaka.util.Error object from the event.
+  onPlayerError(event.detail);
+}
+
+function initFailed(errorEvent) {
+  // Handle the failure to load; errorEvent.detail.reasonCode has a
+  // shaka.ui.FailReasonCode describing why.
+  console.error('Unable to load the UI library!');
+}
+
+// Listen to the custom shaka-ui-loaded event, to wait until the UI is loaded.
+document.addEventListener('shaka-ui-loaded', init);
+// Listen to the custom shaka-ui-load-failed event, in case Shaka Player fails
+// to load (e.g. due to lack of browser support).
+document.addEventListener('shaka-ui-load-failed', initFailed);
 </script>
+
 
 </body>
 </html>
