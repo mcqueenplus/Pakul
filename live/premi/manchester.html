@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="Haha">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://unpkg.com/video.js@6.4.0/dist/video-js.css" rel="stylesheet">
+<script src="https://unpkg.com/video.js@6.4.0/dist/video.js"></script>
+<script src="https://unpkg.com/videojs-flash@2.0.1/dist/videojs-flash.js"></script>
+<script src="https://unpkg.com/videojs-contrib-hls@5.12.2/dist/videojs-contrib-hls.js"></script>
+
+  <!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
+  <!-- <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script> --> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    
+</head>
+<body oncontextmenu='return false' onkeydown='return false;' onmousedown='return false;'>
+
+  <div class="d-flex justify-content-center mt-5">
+  <div id="player">
+   <video
+    id="my-video"
+    class="video-js"
+    controls
+    preload="auto"
+    width="320"
+    height="250"
+    poster="https://raw.githubusercontent.com/shabrina0401/pict/main/UEL/MUN0903.png"
+    data-setup="{}"
+  >
+    <source src="https://sports01.livnvess.com/live/stream-168740.m3u8?txSecret=38d4d0dc6dfe758f9313ec72235a44a9&txTime=640a7bbc" type="application/x-mpegURL" />
+    <p class="vjs-no-js">
+      To view this video please enable JavaScript, and consider upgrading to a
+      web browser that
+      <a href="https://videojs.com/html5-video-support/" target="_blank"
+        >supports HTML5 video</a
+      >
+    </p>
+  </video>
+  </div>
+  </div>
+  <br><br>
+  <script src="https://vjs.zencdn.net/7.17.0/video.min.js"></script>
+  
+<style>
+     body {
+        width:100%;
+        height: 100%;
+        font-family: Poppins;
+        display:block;
+        position: absolute;
+        padding: 0px;
+        margin: 0px;
+        background: #000;
+        overflow: hidden;
+    }
+ .player
+ {
+    width:100%;
+    height: 100%;
+    display:block;
+    position: absolute;
+    }
+
+</style>
+<script>
+    <script>
+    var overrideNative = false;
+
+var player = videojs('example-video', {
+	html5: {
+    hls: {
+      overrideNative: overrideNative
+    },
+    nativeVideoTracks: !overrideNative,
+    nativeAudioTracks: !overrideNative,
+    nativeTextTracks: !overrideNative
+  }
+});
+player.play();
+</script>
+</script>
+</body>
+</html>
